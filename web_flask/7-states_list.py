@@ -7,9 +7,8 @@ app = Flask(__name__)
 
 
 @app.teardown_appcontext
-def shutdown_session(exception=None):
-    """reload storage after each request
-    """
+def app_teardown(arg=None):
+    """Clean-up session"""
     storage.close()
 
 
