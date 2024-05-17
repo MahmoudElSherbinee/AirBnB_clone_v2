@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Starts a Flask web application"""
+"""let's start a Flask web application"""
 from flask import Flask, escape
 
 app = Flask(__name__)
