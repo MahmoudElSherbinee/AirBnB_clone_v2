@@ -4,8 +4,8 @@ starts a Flask web application
 """
 
 from flask import Flask, render_template
-from models import * # type: ignore
-from models import storage # type: ignore
+from models import *
+from models import storage
 app = Flask(__name__)
 
 
