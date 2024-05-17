@@ -1,24 +1,24 @@
 #!/usr/bin/python3
-"""simple flask app
-"""
-from flask import Flask, render_template
+"""Starts a Flask web application"""
 from models import storage
+from models.state import State
+from flask import Flask, render_template
+
 app = Flask(__name__)
+
+
+@app.route("/states_list")
+def states_list():
+    """Render template with states"""
+    path = "7-states_list.html"
+    states = storage.all(State)
+    return render_template(path, states=states)
 
 
 @app.teardown_appcontext
 def app_teardown(arg=None):
     """Clean-up session"""
     storage.close()
-
-
-@app.route("/states_list", strict_slashes=False)
-def states_list():
-    """list states sorted by name
-    """
-    states = list(storage.all("State").values())
-    states.sort(key=lambda x: x.name)
-    return render_template('7-states_list.html', states=states)
 
 
 if __name__ == "__main__":
