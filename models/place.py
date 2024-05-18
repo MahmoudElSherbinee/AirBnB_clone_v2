@@ -46,7 +46,8 @@ class Place(BaseModel, Base):
         "Amenity",
         secondary=place_amenity,
         backref="place",
-        viewonly=False
+        viewonly=False,
+        overlaps="_Place__amenities,place"
     )
 
     @property
