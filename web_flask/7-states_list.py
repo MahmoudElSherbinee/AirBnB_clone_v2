@@ -1,26 +1,26 @@
 #!/usr/bin/python3
-"""Starts a Flask web application"""
-from models import storage
-from models.state import State
+"""simple flask app
+"""
 from flask import Flask, render_template
-
+from models import storage
 app = Flask(__name__)
 
 
-@app.route("/states_list")
-def states_list():
-    """Render template with states"""
-    path = "7-states_list.html"
-    states = storage.all(State)
-    return render_template(path, states=states)
-
-
 @app.teardown_appcontext
-def app_teardown(arg=None):
-    """Clean-up session"""
+def shutdown_session(exception=None):
+    """reload storage after each request
+    """
     storage.close()
 
 
+@app.route("/states_list", strict_slashes=False)
+def states_list():
+    """list states sorted by name
+    """
+    states = list(storage.all("State").values())
+    states.sort(key=lambda x: x.name)
+    return render_template('7-states_list.html', states=states)
+
+
 if __name__ == "__main__":
-    app.url_map.strict_slashes = False
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host='0.0.0.0', port=5000)

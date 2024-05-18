@@ -1,47 +1,38 @@
 #!/usr/bin/python3
-"""let's start a Flask web application"""
+"""simple flask app
+"""
 from flask import Flask
-
 app = Flask(__name__)
 
 
-@app.route("/")
+@app.route("/", strict_slashes=False)
 def hello_hbnb():
-    """
-    Returns:
-        str: A string with the message "Hello HBNB!".
+    """root route
     """
     return "Hello HBNB!"
 
 
-@app.route("/hbnb")
+@app.route("/hbnb", strict_slashes=False)
 def hbnb():
-    """
-    Returns:
-        str: A string with the message "HBNB".
+    """hbnb
     """
     return "HBNB"
 
 
-@app.route("/c/<text>")
-def c_is_fun(text):
+@app.route("/c/<text>", strict_slashes=False)
+def cisfun(text):
+    """c what
     """
-    Returns:
-        str: A string with the formatted message.
-    """
-    return "C " + text.replace("_", " ")
+    return "C {}".format(text.replace('_', ' '))
 
 
-@app.route("/python/", defaults={'text': 'is cool'})
-@app.route("/python/<text>")
-def python_is_cool(text):
+@app.route("/python/", strict_slashes=False)
+@app.route("/python/<text>", strict_slashes=False)
+def pythoniscool(text='is cool'):
+    """python is cool
     """
-    Returns:
-        str: A string with the formatted message.
-    """
-    return "Python " + text.replace("_", " ")
+    return "Python {}".format(text.replace('_', ' '))
 
 
 if __name__ == "__main__":
-    app.url_map.strict_slashes = False
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host='0.0.0.0', port=5000)

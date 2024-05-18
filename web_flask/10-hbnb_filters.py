@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""simple flask app
+"""hbnb filter
 """
 from flask import Flask, render_template
 from models import storage
@@ -13,15 +13,22 @@ def shutdown_session(exception=None):
     storage.close()
 
 
-@app.route("/cities_by_states", strict_slashes=False)
+@app.route("/hbnb_filters", strict_slashes=False)
 def states_cities_list():
-    """list states and cities sorted by name
+    """pass states and cities sorted by name
+    and amenities
     """
     states = list(storage.all("State").values())
     states.sort(key=lambda x: x.name)
     for state in states:
         state.cities.sort(key=lambda x: x.name)
-    return render_template('8-cities_by_states.html', states=states)
+    amenities = list(storage.all("Amenity").values())
+    amenities.sort(key=lambda x: x.name)
+    return render_template(
+        '10-hbnb_filters.html',
+        states=states,
+        amenities=amenities
+    )
 
 
 if __name__ == "__main__":

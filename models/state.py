@@ -24,9 +24,8 @@ class State(BaseModel, Base):
             """get all cities with the current state id
             from filestorage
             """
-            city_list = []
-            for city in models.storage.all(models.City):
-                if city.state_id == self.id:
-                    city_list.append(city)
-            return(city_list)
-            
+            l = [
+                v for k, v in models.storage.all(models.City).items()
+                if v.state_id == self.id
+            ]
+            return (l)
