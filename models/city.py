@@ -1,20 +1,33 @@
 #!/usr/bin/python3
-"""This is the city class"""
+"""Defines the City class."""
+
 from models.base_model import BaseModel, Base
-from models.state import State
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
 
 
 class City(BaseModel, Base):
-    """This is the class for City
+    """Represents a city in a geographic location system.
+
+    This class inherits from BaseModel and links to the MySQL table 'cities'.
+    It stores information about cities and their corresponding states.
+
     Attributes:
-        __tablename__: name of the table represented
-        state_id: The state id
-        name: input name
+        __tablename__ (str): The name of the MySQL table to store cities.
+        name (sqlalchemy String): The name of the city.
+        state_id (sqlalchemy String): The ID of the state the city belongs to.
+        places (sqlalchemy relationship):
+        Relationship with Place class to establish
+        one-to-many association between cities and places.
     """
 
     __tablename__ = "cities"
-    state_id = Column(String(60), ForeignKey(State.id), nullable=False)
+
     name = Column(String(128), nullable=False)
-    places = relationship("Place", cascade="all, delete", backref="city")
+    state_id = Column(String(60), ForeignKey("states.id"), nullable=False)
+    places = relationship(
+        "Place",
+        backref="city",
+        cascade="delete",
+        passive_deletes=True
+    )

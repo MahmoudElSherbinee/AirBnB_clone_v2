@@ -1,20 +1,24 @@
 #!/usr/bin/python3
-"""This is the amenity class"""
+"""Defines the Amenity class."""
 from models.base_model import BaseModel, Base
-from models.place import place_amenity
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 
 
 class Amenity(BaseModel, Base):
-    """This is the class for Amenity
+    """Represents an Amenity for a MySQL database.
+
+    Inherits from SQLAlchemy Base and links to the MySQL table amenities.
+
     Attributes:
-        name: input name
+        __tablename__ (str): The name of the MySQL table to store amenities.
+        name (sqlalchemy String): The name of the amenity.
+        place_amenities (sqlalchemy relationship):
+        Relationship between Place and Amenity.
     """
+
     __tablename__ = "amenities"
     name = Column(String(128), nullable=False)
     place_amenities = relationship(
-        "Place",
-        secondary=place_amenity,
-        backref="amenity"
+        "Place", secondary="place_amenity", viewonly=False
     )
