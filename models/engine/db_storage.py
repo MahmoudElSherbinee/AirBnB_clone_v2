@@ -12,6 +12,9 @@ from models.user import User
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
+classes = {"Amenity": Amenity, "City": City,
+                   "Place": Place, "Review": Review,
+                   "State": State, "User": User}
 
 class DBStorage:
     """Represents a database storage engine.
@@ -35,25 +38,18 @@ class DBStorage:
         if getenv("HBNB_ENV") == "test":
             Base.metadata.drop_all(self.__engine)
 
+    
+        
     def all(self, cls=None):
-        """Query all objects in the current database session.
-
-        Args:
-            cls (class, optional): The class to query objects for.
-
-        Returns:
-            dict: A dictionary of queried objects.
-        """
-        classes = {"Amenity": Amenity, "City": City,
-                   "Place": Place, "Review": Review,
-                   "State": State, "User": User}
-        if cls is None:
-            objs = []
-            for cls in classes:
-                objs.extend(self.__session.query(classes[cls]).all())
-        else:
-            objs = self.__session.query(classes[cls]).all()
-        return {"{}.{}".format(type(o).__name__, o.id): o for o in objs}
+        """query on the current database session"""
+        new_dict = {}
+        for clss in classes:
+            if cls is None or cls is classes[clss] or cls is clss:
+                objs = self.__session.query(classes[clss]).all()
+                for obj in objs:
+                    key = obj.__class__.__name__ + '.' + obj.id
+                    new_dict[key] = obj
+        return (new_dict)
 
     def new(self, obj):
         """Add a new object to the current database session.
